@@ -1,0 +1,9 @@
+#include "JobConfig/pions/pions_nts3tgtstops.fcl"
+
+services: @local::Services.Sim
+services.GeometryService.inputFile: "piplusenu/geom.txt"
+services.TFileService.fileName: "nts.owner.pions-nts3.version.sequencer.root"
+
+// Initialze seeding of random engines: do not put these lines in base .fcl files for grid jobs.
+services.SeedService.baseSeed         :  8
+services.SeedService.maxUniqueEngines :  20
