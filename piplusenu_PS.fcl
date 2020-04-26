@@ -1,0 +1,6 @@
+# -*- mode: tcl -*- 
+
+#include "JobConfig/pions/pions_g4s1.fcl"
+
+services.GeometryService.inputFile: "piplusenu/geom.txt"
+
