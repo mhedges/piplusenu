@@ -1,0 +1,61 @@
+# -*- mode:tcl -*-
+#------------------------------------------------------------------------------
+# generate 70 MeV/c electrons and make STNTUPLE
+# p1 : default reconstruction path
+# p2 : read and ntuple (use with RootInput to ntuple MDC'2018 files)
+# p3 : path to debug the TPR and CPR reconstruction paths separately
+#------------------------------------------------------------------------------
+BEGIN_PROLOG
+  bgHitFiles   @protect_ignore: @nil
+  INPUT_MODULE @protect_ignore: EmptyEvent
+  TRIGGER_PATH @protect_ignore: p1
+  PROCESS_NAME @protect_ignore: EPlusGunStnmaker
+END_PROLOG
+
+#include "Stntuple/test/stnmaker.fcl"
+
+services.GeometryService.inputFile: "piplusenu/geom.txt"
+#------------------------------------------------------------------------------
+# uncomment the next 2 lines if you want the DST (.art) file to be written out
+#-----------------------------------------------------------------------------
+# physics.out                               : [ detectorOutput ]
+# outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
+#------------------------------------------------------------------------------
+# output file names 
+#------------------------------------------------------------------------------
+services.TFileService.fileName            : "nts._USER_.piplusenu_oot_gun_stnmaker.xxx.000001.root"
+physics.filters.InitStntuple.histFileName : "nts._USER_.piplusenu_oot_gun_stnmaker.xxx.000001.stn"
+outputs.detectorOutput.fileName           : "sim._USER_.piplusenu_oot_gun_stnmaker.xxx.000001.art"
+
+physics.producers.generate                      : { @table::StoppedParticleReactionGunPion
+    physics : { @table::StoppedParticleReactionGun.physics
+	pdgId            : -11
+	elow             : 70.
+	ehi              : 70.01
+	spectrumVariable : "momentum"
+	spectrumShape    : "flat"
+    }
+
+    pionStops            : { 
+	inputFiles            : ["results/piplusenu_oot_RPC/nts.owner.pions-nts3.version.sequencer.root"]
+	averageNumRecordsToUse: 500000
+	treeName              : "stoppedPionDumper/stops"
+	branchName            : "stops"
+	verbositylevel        : 0
+    }
+}
+#------------------------------------------------------------------------------
+# uncomment to avoid waisting time on the initialization of detailed neutron 
+# cross sections - that shouldn't affect the electron simulation 
+#------------------------------------------------------------------------------
+physics.producers.g4run.physics.physicsListName : "QGSP_BERT"
+#------------------------------------------------------------------------------
+# currently = choose MVA's of the right sign
+#------------------------------------------------------------------------------
+physics.producers.TrkQualDeMHPar.TrkQualMVA  : { @table::TrkQualNeg.TrkQualMVA }
+physics.producers.TrkQualDeMHDar.TrkQualMVA  : { @table::TrkQualNeg.TrkQualMVA }
+physics.producers.TrkQualDmuMHPar.TrkQualMVA : { @table::TrkQualNeg.TrkQualMVA }
+physics.producers.TrkQualDmuMHDar.TrkQualMVA : { @table::TrkQualNeg.TrkQualMVA }
+#------------------------------------------------------------------------------
+# everything below is appended by murat/scripts/submit_mu2e_job
+#------------------------------------------------------------------------------
