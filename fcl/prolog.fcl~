@@ -1,0 +1,11 @@
+StoppedParticleReactionGunPion: { module_type    : StoppedParticleReactionGunPion
+    physics: {
+      genId           : StoppedParticleReactionGun
+      pdgId           : -11
+      spectrumShape   : CeEndpoint
+      spectrumVariable: totalEnergy
+    }
+    muonStops         : @local::mu2e.tgtMuonStops
+}
+
+

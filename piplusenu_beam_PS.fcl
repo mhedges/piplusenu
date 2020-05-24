@@ -1,0 +1,26 @@
+# -*- mode: tcl -*- 
+
+BEGIN_PROLOG
+
+#               Energy cuts on electron, positron, photon, and neutron.
+#
+CutEPPhN @protect_ignore: {
+    type : intersection
+    pars : [ { type: kineticEnergy cut: 50.0 },                 # MeV
+             { type: pdgId pars: [ 11, -11, 22, 2112 ] } ]
+}
+
+END_PROLOG
+
+#include "JobConfig/beam/PS.fcl"
+
+services.GeometryService.inputFile: "piplusenu/geom.txt"
+
+physics.producers.g4run.Mu2eG4CommonCut : {
+    type : union
+    pars : [
+	    @local::CutEPPhN,          // x% speed up from killing electrons with Ekin<50 MeV
+	    @local::dsRegionCuts,
+	    @local::extMonRegionCuts
+	   ]
+ }

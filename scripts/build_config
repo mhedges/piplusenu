@@ -1,0 +1,17 @@
+#!/bin/bash
+
+dir=include
+
+# echo pwd  `pwd`
+
+#------------------------------------------------------------------------------
+# 'piplusenu' and its subpackages
+#------------------------------------------------------------------------------
+if [ ! -d ../$dir/piplusenu ] ; then mkdir -p ../$dir/piplusenu ; fi
+
+for d in ana ; do
+    if [ ! -e ../$dir/piplusenu/$d ] ; then 
+	echo `pwd`$0 : creating symbolic link ../$dir/piplusenu/$d
+	ln -s ../../piplusenu/$d/$d ../$dir/piplusenu/$d
+    fi
+done

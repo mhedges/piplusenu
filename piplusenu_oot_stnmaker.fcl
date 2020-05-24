@@ -6,20 +6,28 @@
 # p3 : path to debug the TPR and CPR reconstruction paths separately
 #------------------------------------------------------------------------------
 BEGIN_PROLOG
-  bgHitFiles   @protect_ignore: @nil
-  INPUT_MODULE @protect_ignore: EmptyEvent
-  TRIGGER_PATH @protect_ignore: p1
-  PROCESS_NAME @protect_ignore: EPlusGunStnmaker
+  bgHitFiles             @protect_ignore: @nil
+  INPUT_MODULE           @protect_ignore: EmptyEvent
+  TRIGGER_PATH           @protect_ignore: p2
+
+  PROCESS_NAME           @protect_ignore: p2
+#
+  BLIND_TIME             @protect_ignore: 50.   
+#  TIME_OFFSET_MAPS       @protect_ignore: { inputs : [ "compressDigiMCs:protonTimeMap", "compressDigiMCs:muonTimeMap" ] }
+#  TIME_OFFSET_MAPS       @protect_ignore: [ "g4run", "g4run" ] 
+  PROTON_BUNCH_INTENSITY @protect_ignore: 3.9e6         # nominal/10
+  FLASH_EVENTS_PER_POT   @protect_ignore: 9.777e-4      # for uncut flash to be used in mixing
 END_PROLOG
 
 #include "Stntuple/test/stnmaker.fcl"
 
 services.GeometryService.inputFile: "piplusenu/geom.txt"
+source       : { module_type : RootInput   }
 #------------------------------------------------------------------------------
 # uncomment the next 2 lines if you want the DST (.art) file to be written out
 #-----------------------------------------------------------------------------
-# physics.out                               : [ detectorOutput ]
-# outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
+physics.out                               : [ detectorOutput ]
+outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
 #------------------------------------------------------------------------------
 # output file names 
 #------------------------------------------------------------------------------
@@ -29,6 +37,7 @@ outputs.detectorOutput.fileName           : "sim._USER_.piplusenu_oot_gun_stnmak
 
 physics.producers.generate                      : { @table::StoppedParticleReactionGunPion
     physics : { @table::StoppedParticleReactionGun.physics
+	genId            : piEplusNuGun
 	pdgId            : -11
 	elow             : 70.
 	ehi              : 70.01
@@ -49,6 +58,44 @@ physics.producers.generate                      : { @table::StoppedParticleReact
 # cross sections - that shouldn't affect the electron simulation 
 #------------------------------------------------------------------------------
 physics.producers.g4run.physics.physicsListName : "QGSP_BERT"
+
+# exclude "flashMixerTrkCal:protonTimeMap" defined in Mixing.protonTimeMaps
+# physics.producers.protonTimeMap.InputTimeMaps : [ "protonTimeMapPrimary", "PSMixerCRV:protonTimeMap", "DSMixerCRV:protonTimeMap" ]
+physics.producers.protonTimeMap.InputTimeMaps : @local::TIME_OFFSET_MAPS
+#------------------------------------------------------------------------------
+# move blind time down to zero, dont' use DB
+#------------------------------------------------------------------------------
+services.DbService.verbose                                   : 0
+services.ProditionsService.strawElectronics.useDb            : false
+services.ProditionsService.strawElectronics.verbose          : 0
+
+services.ProditionsService.strawElectronics.flashEnd         : @erase
+services.ProditionsService.strawElectronics.flashEnd         : @local::BLIND_TIME
+
+physics.producers.CaloShowerStepROFromShowerStep.blindTime   : @erase
+physics.producers.CaloShowerStepROFromShowerStep.blindTime   : @local::BLIND_TIME
+
+physics.producers.CaloDigiFromShower.blindTime               : @erase 
+physics.producers.CaloDigiFromShower.blindTime               : @local::BLIND_TIME
+
+physics.producers.CaloProtoClusterFromCrystalHit.timeCut     : @erase
+physics.producers.CaloProtoClusterFromCrystalHit.timeCut     : @local::BLIND_TIME
+
+physics.producers.makeSH.minimumTime                         : @erase
+physics.producers.makeSH.minimumTime                         : @local::BLIND_TIME
+
+physics.producers.TimeClusterFindere.tmin                    : @erase
+physics.producers.TimeClusterFindere.tmin                    : @local::BLIND_TIME
+# 
+physics.filters.CalTimePeakFinder.minClusterTime             : @erase
+physics.filters.CalTimePeakFinder.minClusterTime             : @local::BLIND_TIME
+# 
+physics.producers.DeltaFinder.minimumTime                    : @erase
+physics.producers.DeltaFinder.minimumTime                    : @local::BLIND_TIME
+# 
+physics.filters.CalHelixFinderDe.HelixFinderAlg.minimumTime : @erase
+physics.filters.CalHelixFinderDe.HelixFinderAlg.minimumTime : @local::BLIND_TIME
+
 #------------------------------------------------------------------------------
 # currently = choose MVA's of the right sign
 #------------------------------------------------------------------------------

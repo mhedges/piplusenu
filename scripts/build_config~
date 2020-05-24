@@ -1,0 +1,30 @@
+#!/bin/bash
+
+dir=include
+
+# echo pwd  `pwd`
+
+#------------------------------------------------------------------------------
+# 'murat' and its subpackages, excluding Stntuple
+#------------------------------------------------------------------------------
+if [ ! -d ../$dir/murat ] ; then mkdir -p ../$dir/murat ; fi
+
+for d in alg ana gaas gui mod obj limits mclimit plot pet petr tdr; do
+    if [ ! -e ../$dir/murat/$d ] ; then 
+	echo `pwd`$0 : creating symbolic link ../$dir/murat/$d
+	ln -s ../../murat/$d/$d ../$dir/murat/$d
+    fi
+done
+
+#------------------------------------------------------------------------------
+# murat/Stntuple and its subpackages
+#------------------------------------------------------------------------------
+# if [ ! -d ../$dir/Stntuple ] ; then mkdir -p ../$dir/Stntuple ; fi
+# 
+# # for d in alg base gui loop mod obj val ; do
+# for d in alg base loop mod obj val ; do
+#     if [ ! -e ../$dir/Stntuple/$d ] ; then 
+# 	echo `pwd`$0 : creating symbolic link ../$dir/Stntuple/$d
+# 	ln -s ../../murat/Stntuple/$d/$d ../$dir/Stntuple/$d
+#     fi
+# done

@@ -1,0 +1,52 @@
+# -*- mode: tcl -*-
+###############################################################################
+# write GDML file with the Mu2e geometry
+# need to process at least one event for GDML file to be written out
+# to speed up the job, use G4 physics table QGSP_BERT
+################################################################################
+#include "fcl/minimalMessageService.fcl"
+#include "fcl/standardProducers.fcl"
+#include "fcl/standardServices.fcl"
+
+#include "Stntuple/fcl/prolog.fcl"
+
+BEGIN_PROLOG
+  bgHitFiles : @nil
+END_PROLOG
+
+#include "Stntuple/fcl/templates.fcl"
+
+process_name : WriteGdml
+
+source : {
+  module_type : EmptyEvent
+  maxEvents   : 1
+  firstRun    : 1
+}
+
+physics : {
+    producers: { @table::Stntuple.producers 
+	g4run: { @table::g4run
+	    debug  : { @table::g4run.debug 
+		writeGDML    : true 
+		GDMLFileName : "mu2e_geometry.gdml"
+	    }
+	}
+    }
+    filters  : { @table::Stntuple.filters   }
+    
+    p1 : [ @sequence::Stntuple.gen_g4 ] 
+    e1 : [ ]
+    
+    trigger_paths  : [p1]
+    end_paths      : [e1]
+}
+
+# to save initialization time
+# physics.producers.g4run.physics.physicsListName : "QGSP_BERT"
+physics.producers.g4run.physics.physicsListName : "Minimal"
+
+# 2018-05-17: the default geometry file defined in Stntuple/fcl/templates.fcl defines the CD3 geometry
+# template for changing the geometry file, if needed
+services.GeometryService.inputFile: "piplusenu/geom.txt"
+# services.GeometryService.inputFile: "Mu2eG4/geom/geom_common_newTargPS.txt"
