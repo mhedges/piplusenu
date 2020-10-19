@@ -1,0 +1,11 @@
+#
+
+ pet01sXXb0    pi+-> e nu  TGT
+ peo01sXXb0    pi+-> e nu  OOT
+
+ pmt01SXXb0    pi+-> mu (e nu) nu  TGT
+ pmo01SXXb0    pi+-> mu (e nu) nu  OOT
+
+ electons ....
+
+ muon decays in flight, muons come from the TS

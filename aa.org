@@ -1,0 +1,27 @@
+TanDi Opened new file: /mu2e/data/users/mhedges/datasets/piplusenu/stntuple/pmo00s41b0/nts._USER_.pmo00s41b0.piplusenu.00043.stn
+ *** Run,Event:      1,9176      Rs:      43 :  >>> TStnAna: Processed        500 events
+ *** Run,Event:      1,17390     Rs:      43 :  >>> TStnAna: Processed       1000 events
+ *** Run,Event:      1,25228     Rs:      43 :  >>> TStnAna: Processed       1500 events
+ *** Run,Event:      1,33903     Rs:      43 :  >>> TStnAna: Processed       2000 events
+ *** Run,Event:      1,42191     Rs:      43 :  >>> TStnAna: Processed       2500 events
+ *** Run,Event:      1,42354     Rs:      43 :  trk p > 60: 62.440407
+ *** Run,Event:      1,50281     Rs:      43 :  >>> TStnAna: Processed       3000 events
+ *** Run,Event:      1,58819     Rs:      43 :  >>> TStnAna: Processed       3500 events
+ *** Run,Event:      1,67933     Rs:      43 :  >>> TStnAna: Processed       4000 events
+ *** Run,Event:      1,76230     Rs:      43 :  >>> TStnAna: Processed       4500 events
+ *** Run,Event:      1,80582     Rs:      43 :  trk p > 60: 60.875076
+ *** Run,Event:      1,84932     Rs:      43 :  >>> TStnAna: Processed       5000 events
+ *** Run,Event:      1,90044     Rs:      43 :  trk p > 60: 61.798622
+ *** Run,Event:      1,94105     Rs:      43 :  >>> TStnAna: Processed       5500 events
+ *** Run,Event:      1,102509    Rs:      43 :  >>> TStnAna: Processed       6000 events
+ *** Run,Event:      1,110507    Rs:      43 :  >>> TStnAna: Processed       6500 events
+ *** Run,Event:      1,119406    Rs:      43 :  >>> TStnAna: Processed       7000 events
+ *** Run,Event:      1,128232    Rs:      43 :  >>> TStnAna: Processed       7500 events
+ *** Run,Event:      1,137019    Rs:      43 :  >>> TStnAna: Processed       8000 events
+ *** Run,Event:      1,137903    Rs:      43 :  trk p > 60: 60.686668
+ *** Run,Event:      1,146161    Rs:      43 :  >>> TStnAna: Processed       8500 events
+ *** Run,Event:      1,155457    Rs:      43 :  >>> TStnAna: Processed       9000 events
+ *** Run,Event:      1,163630    Rs:      43 :  >>> TStnAna: Processed       9500 events
+ *** Run,Event:      1,172133    Rs:      43 :  >>> TStnAna: Processed      10000 events
+----- end job: ---- StnTrackAna
+p

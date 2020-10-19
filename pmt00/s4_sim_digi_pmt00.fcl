@@ -7,15 +7,13 @@
 #------------------------------------------------------------------------------
 BEGIN_PROLOG
   bgHitFiles             @protect_ignore: @nil
-  INPUT_MODULE           @protect_ignore: EmptyEvent
-  TRIGGER_PATH           @protect_ignore: p2
-
-  PROCESS_NAME           @protect_ignore: p2
+# INPUT_MODULE           @protect_ignore: EmptyEvent
+# TRIGGER_PATH           @protect_ignore: p0
+  PROCESS_NAME           @protect_ignore: EPlusGunStnmaker
 #
   BLIND_TIME             @protect_ignore: 200.   
-#   TIME_OFFSET_MAPS       @protect_ignore: { inputs : [ "compressDigiMCs:protonTimeMap", "compressDigiMCs:muonTimeMap" ] }
-#   TIME_OFFSET_MAPS       @protect_ignore: { inputs : [ "compressDigiMCs:protonTimeMap", "compressDigiMCs:muonTimeMap" ] }
-#   TIME_OFFSET_MAPS       @protect_ignore: [ "g4run", "g4run" ] 
+#  TIME_OFFSET_MAPS       @protect_ignore: { inputs : [ "compressDigiMCs:protonTimeMap", "compressDigiMCs:muonTimeMap" ] }
+#  TIME_OFFSET_MAPS       @protect_ignore: [ "g4run", "g4run" ] 
   PROTON_BUNCH_INTENSITY @protect_ignore: 3.9e6         # nominal/10
   FLASH_EVENTS_PER_POT   @protect_ignore: 9.777e-4      # for uncut flash to be used in mixing
 END_PROLOG
@@ -24,32 +22,34 @@ END_PROLOG
 
 #include "Stntuple/test/stnmaker.fcl"
 
+process_name : p0
+
 services.GeometryService.inputFile: "piplusenu/geom.txt"
-source       : { module_type : RootInput   }
 #------------------------------------------------------------------------------
 # uncomment the next 2 lines if you want the DST (.art) file to be written out
 #-----------------------------------------------------------------------------
-# physics.out                               : [ detectorOutput ]
-# outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
+physics.out                               : [ detectorOutput ]
+outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
 #------------------------------------------------------------------------------
 # output file names 
 #------------------------------------------------------------------------------
-services.TFileService.fileName            : "nts._USER_.piplusenu_tgt_gun_stnmaker.xxx.000001.root"
-physics.filters.InitStntuple.histFileName : "nts._USER_.piplusenu_tgt_gun_stnmaker.xxx.000001.stn"
-outputs.detectorOutput.fileName           : "sim._USER_.piplusenu_tgt_gun_stnmaker.xxx.000001.art"
+services.TFileService.fileName            : "nts._USER_.pmt00s41b0.piplusenu.000001.root"
+physics.filters.InitStntuple.histFileName : "nts._USER_.pmt00s41b0.piplusenu.000001.stn"
+outputs.detectorOutput.fileName           : "sim._USER_.pmt00s41b0.piplusenu.000001.art"
 
 physics.producers.generate                      : { @table::StoppedParticleReactionGunPion
     physics : { @table::StoppedParticleReactionGun.physics
 	genId            : piEplusNuGun
-	pdgId            : -11
-	elow             : 70.
-	ehi              : 70.01
+	pdgId            : -13
+	elow             : 29.380
+	ehi              : 29.381
 	spectrumVariable : "momentum"
 	spectrumShape    : "flat"
     }
 
     pionStops            : { 
-	inputFiles            : ["results/piplusenu_tgt_RPC/nts.owner.pions-nts3.version.sequencer.root"]
+  #inputFiles            : ["results/2020-07-30-10-13.piplusenu_tgt_RPC_Ti_degrader_3mm.mu2egpvm04.28165/nts.owner.pions-nts3.version_Ti_degrader_3mm.sequencer.root"]
+        inputFiles      : ["xroot://fndca1.fnal.gov/pnfs/fnal.gov/usr/mu2e/resilient/users/mhedges/su2020/stops/nts.owner.pions-nts3.tgt_Ti_degrader_3mm.sequencer.root"]
 	averageNumRecordsToUse: 500000
 	treeName              : "stoppedPionDumper/stops"
 	branchName            : "stops"

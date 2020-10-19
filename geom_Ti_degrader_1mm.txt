@@ -6,6 +6,9 @@
 bool   degrader.build = true;
 double degrader.rotation = 0.0; // 0 if in beam, -90 if out of beam (degrees)
 
+string degrader.filter.materialName        = "G4_Ti";
+double degrader.filter.halfLength          = 0.5;
+
 double ts.coll3.rotationAngle    = 180.0;
 
 //-------------------------------------------

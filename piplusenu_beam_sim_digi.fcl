@@ -7,15 +7,14 @@
 #------------------------------------------------------------------------------
 BEGIN_PROLOG
   bgHitFiles             @protect_ignore: @nil
-  INPUT_MODULE           @protect_ignore: EmptyEvent
-  TRIGGER_PATH           @protect_ignore: p2
-
-  PROCESS_NAME           @protect_ignore: p2
+  mu2e.tgtMuonStops      @protect_ignore: {}
+#  INPUT_MODULE           @protect_ignore: EmptyEvent
+  TRIGGER_PATH           @protect_ignore: p01
+  PROCESS_NAME           @protect_ignore: EPlusGunStnmaker
 #
-  BLIND_TIME             @protect_ignore: 200.   
-#   TIME_OFFSET_MAPS       @protect_ignore: { inputs : [ "compressDigiMCs:protonTimeMap", "compressDigiMCs:muonTimeMap" ] }
-#   TIME_OFFSET_MAPS       @protect_ignore: { inputs : [ "compressDigiMCs:protonTimeMap", "compressDigiMCs:muonTimeMap" ] }
-#   TIME_OFFSET_MAPS       @protect_ignore: [ "g4run", "g4run" ] 
+  BLIND_TIME             @protect_ignore: 200.
+#  TIME_OFFSET_MAPS       @protect_ignore: { inputs : [ "compressDigiMCs:protonTimeMap", "compressDigiMCs:muonTimeMap" ] }
+#  TIME_OFFSET_MAPS       @protect_ignore: [ "g4run", "g4run" ] 
   PROTON_BUNCH_INTENSITY @protect_ignore: 3.9e6         # nominal/10
   FLASH_EVENTS_PER_POT   @protect_ignore: 9.777e-4      # for uncut flash to be used in mixing
 END_PROLOG
@@ -24,44 +23,44 @@ END_PROLOG
 
 #include "Stntuple/test/stnmaker.fcl"
 
-services.GeometryService.inputFile: "piplusenu/geom.txt"
+process_name : p01
 source       : { module_type : RootInput   }
+services.GeometryService.inputFile: "piplusenu/geom.txt"
 #------------------------------------------------------------------------------
 # uncomment the next 2 lines if you want the DST (.art) file to be written out
 #-----------------------------------------------------------------------------
-# physics.out                               : [ detectorOutput ]
-# outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
+physics.out                               : [ detectorOutput ]
+outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
 #------------------------------------------------------------------------------
 # output file names 
 #------------------------------------------------------------------------------
-services.TFileService.fileName            : "nts._USER_.piplusenu_tgt_gun_stnmaker.xxx.000001.root"
-physics.filters.InitStntuple.histFileName : "nts._USER_.piplusenu_tgt_gun_stnmaker.xxx.000001.stn"
-outputs.detectorOutput.fileName           : "sim._USER_.piplusenu_tgt_gun_stnmaker.xxx.000001.art"
+services.TFileService.fileName            : "nts._USER_.piplusenu_beam_stnmaker.xxx.000001.root"
+physics.filters.InitStntuple.histFileName : "nts._USER_.piplusenu_beam_stnmaker.xxx.000001.stn"
+outputs.detectorOutput.fileName           : "sim._USER_.piplusenu_beam_stnmaker.xxx.000001.art"
 
-physics.producers.generate                      : { @table::StoppedParticleReactionGunPion
-    physics : { @table::StoppedParticleReactionGun.physics
-	genId            : piEplusNuGun
-	pdgId            : -11
-	elow             : 70.
-	ehi              : 70.01
-	spectrumVariable : "momentum"
-	spectrumShape    : "flat"
-    }
-
-    pionStops            : { 
-	inputFiles            : ["results/piplusenu_tgt_RPC/nts.owner.pions-nts3.version.sequencer.root"]
-	averageNumRecordsToUse: 500000
-	treeName              : "stoppedPionDumper/stops"
-	branchName            : "stops"
-	verbositylevel        : 0
-    }
-}
 #------------------------------------------------------------------------------
 # uncomment to avoid waisting time on the initialization of detailed neutron 
 # cross sections - that shouldn't affect the electron simulation 
 #------------------------------------------------------------------------------
 physics.producers.g4run.physics.physicsListName : "QGSP_BERT"
 
+physics.producers.g4run : { @table::physics.producers.g4run
+    MultiStageParameters        : { 
+	simParticleNumberOffset : 300000  // safe b/c of g4.particlesSizeLimit in stage1
+	genInputHits            : [ "mothersFilter:DetectorMother" ]
+	inputSimParticles       : "mothersFilter"
+	inputMCTrajectories     : ""
+	inputPhysVolumeMultiInfo: "" # "compressPVmuonBeam"
+    }
+
+    SDConfig : { @table::physics.producers.g4run.SDConfig
+	enableSD        : [ tracker, calorimeter, calorimeterRO, CRV, virtualdetector] // activate just the explicitly listed SDs
+	preSimulatedHits: ["mothersFilter:virtualdetector"]
+	TimeVD: { times : [] }
+    }
+
+}
+# physics.filters.detectorFilter.inputs: [ "g4run:tracker" ]
 # exclude "flashMixerTrkCal:protonTimeMap" defined in Mixing.protonTimeMaps
 # physics.producers.protonTimeMap.InputTimeMaps : [ "protonTimeMapPrimary", "PSMixerCRV:protonTimeMap", "DSMixerCRV:protonTimeMap" ]
 # physics.producers.protonTimeMap.InputTimeMaps : @local::TIME_OFFSET_MAPS

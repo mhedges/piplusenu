@@ -1,0 +1,4 @@
+#mode: -*- tcl -*-
+#include "JobConfig/beam/DS.fcl"
+
+services.GeometryService.inputFile: "piplusenu/geom.txt"

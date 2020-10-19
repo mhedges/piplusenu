@@ -7,8 +7,8 @@
 #------------------------------------------------------------------------------
 BEGIN_PROLOG
   bgHitFiles             @protect_ignore: @nil
-  INPUT_MODULE           @protect_ignore: EmptyEvent
-  TRIGGER_PATH           @protect_ignore: p0
+# INPUT_MODULE           @protect_ignore: EmptyEvent
+# TRIGGER_PATH           @protect_ignore: p0
   PROCESS_NAME           @protect_ignore: EPlusGunStnmaker
 #
   BLIND_TIME             @protect_ignore: 200.   
@@ -17,6 +17,8 @@ BEGIN_PROLOG
   PROTON_BUNCH_INTENSITY @protect_ignore: 3.9e6         # nominal/10
   FLASH_EVENTS_PER_POT   @protect_ignore: 9.777e-4      # for uncut flash to be used in mixing
 END_PROLOG
+
+#include "piplusenu/fcl/prolog.fcl"
 
 #include "Stntuple/test/stnmaker.fcl"
 
@@ -46,7 +48,8 @@ physics.producers.generate                      : { @table::StoppedParticleReact
     }
 
     pionStops            : { 
-	inputFiles            : ["results/piplusenu_tgt_RPC/nts.owner.pions-nts3.version.sequencer.root"]
+ #inputFiles            : ["results/piplusenu_tgt_RPC/nts.owner.pions-nts3.version.sequencer.root"]
+	inputFiles            : ["results/2020-07-30-10-13.piplusenu_tgt_RPC_Ti_degrader_3mm.mu2egpvm04.28165/nts.owner.pions-nts3.version_Ti_degrader_3mm.sequencer.root"]
 	averageNumRecordsToUse: 500000
 	treeName              : "stoppedPionDumper/stops"
 	branchName            : "stops"

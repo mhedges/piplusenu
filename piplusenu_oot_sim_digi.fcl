@@ -8,7 +8,7 @@
 BEGIN_PROLOG
   bgHitFiles             @protect_ignore: @nil
   INPUT_MODULE           @protect_ignore: EmptyEvent
-  TRIGGER_PATH           @protect_ignore: p0
+  TRIGGER_PATH           @protect_ignore: p1111
   PROCESS_NAME           @protect_ignore: EPlusGunStnmaker
 #
   BLIND_TIME             @protect_ignore: 200.
@@ -17,6 +17,8 @@ BEGIN_PROLOG
   PROTON_BUNCH_INTENSITY @protect_ignore: 3.9e6         # nominal/10
   FLASH_EVENTS_PER_POT   @protect_ignore: 9.777e-4      # for uncut flash to be used in mixing
 END_PROLOG
+
+#include "piplusenu/fcl/prolog.fcl"
 
 #include "Stntuple/test/stnmaker.fcl"
 
@@ -28,6 +30,9 @@ services.GeometryService.inputFile: "piplusenu/geom.txt"
 #-----------------------------------------------------------------------------
 physics.out                               : [ detectorOutput ]
 outputs.detectorOutput.SelectEvents       : [ @local::TRIGGER_PATH ]
+outputs.detectorOutput.outputCommands     : [ "keep *_*_*_*",
+					      "drop mu2e::SimParticlemv_g4run__*"
+					     ]
 #------------------------------------------------------------------------------
 # output file names 
 #------------------------------------------------------------------------------
@@ -46,13 +51,27 @@ physics.producers.generate                      : { @table::StoppedParticleReact
     }
 
     pionStops            : { 
-	inputFiles            : ["results/piplusenu_oot_RPC/nts.owner.pions-nts3.version.sequencer.root"]
+  #inputFiles            : ["DataFiles/mergedMuonStops/nts.owner.DS-OOTstops.version.sequencer.root"]
+	inputFiles            : ["results/2020-09-11-16-40.piplusenu_oot_RPC_Ti_degrader_3mm.mu2egpvm04.3851/nts.owner.pions-nts3.version_Ti_degrader_3mm.sequencer.root"]
+	#inputFiles            : ["nts.mhedges.pions-nts3.pions.001000_00000014.root"]
 	averageNumRecordsToUse: 500000
 	treeName              : "stoppedPionDumper/stops"
 	branchName            : "stops"
 	verbositylevel        : 0
     }
 }
+
+physics.p1111 : [ @sequence::Stntuple.gen_g4_time_map,
+		  @sequence::CaloDigiMC.DigiSim      ,
+		  @sequence::TrackerMC.DigiSim       ,
+		  compressDigiMCs                    ,
+		  #		  @sequence::Stntuple.digis          ,
+		  @sequence::Stntuple.trk_hit_reco   ,
+		  @sequence::Stntuple.cal_reco       ,
+		  @sequence::Stntuple.reco_De        ,
+		  #	       @sequence::Stntuple.crv_reco       ,
+		  @sequence::Stntuple.stnmaker_De
+	      ]
 #------------------------------------------------------------------------------
 # uncomment to avoid waisting time on the initialization of detailed neutron 
 # cross sections - that shouldn't affect the electron simulation 

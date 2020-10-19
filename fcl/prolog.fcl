@@ -1,5 +1,5 @@
 # -*- mode:tcl -*-
-
+BEGIN_PROLOG
 StoppedParticleReactionGunPion: { module_type    : StoppedParticleReactionGunPion
     physics: {
 	genId           : StoppedParticleReactionGun
@@ -7,5 +7,6 @@ StoppedParticleReactionGunPion: { module_type    : StoppedParticleReactionGunPio
 	spectrumShape   : CeEndpoint
 	spectrumVariable: totalEnergy
     }
-    muonStops         : @local::mu2e.tgtMuonStops
+    #muonStops         : @local::mu2e.tgtMuonStops
 }
+END_PROLOG

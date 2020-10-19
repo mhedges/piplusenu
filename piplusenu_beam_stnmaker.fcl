@@ -22,7 +22,7 @@ END_PROLOG
 
 #include "piplusenu/fcl/prolog.fcl"
 
-#include "Stntuple/test/stnmaker.fcl"
+#include "Stntuple/fcl/stnmaker.fcl"
 
 services.GeometryService.inputFile: "piplusenu/geom.txt"
 source       : { module_type : RootInput   }
@@ -56,6 +56,7 @@ physics.producers.generate                      : { @table::StoppedParticleReact
 	verbositylevel        : 0
     }
 }
+
 #------------------------------------------------------------------------------
 # uncomment to avoid waisting time on the initialization of detailed neutron 
 # cross sections - that shouldn't affect the electron simulation 

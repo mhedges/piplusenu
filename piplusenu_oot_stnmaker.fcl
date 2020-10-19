@@ -19,6 +19,8 @@ BEGIN_PROLOG
   FLASH_EVENTS_PER_POT   @protect_ignore: 9.777e-4      # for uncut flash to be used in mixing
 END_PROLOG
 
+#include "piplusenu/fcl/prolog.fcl"
+
 #include "Stntuple/test/stnmaker.fcl"
 
 services.GeometryService.inputFile: "piplusenu/geom.txt"

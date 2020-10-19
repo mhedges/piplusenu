@@ -3,8 +3,8 @@
 
 #include "Mu2eG4/geom/geom_2019_PhaseI_hayman_v2.txt"
 
-bool   degrader.build = true;
-double degrader.rotation = 0.0; // 0 if in beam, -90 if out of beam (degrees)
+bool degrader.build = true;
+double degrader.rotation = -90.0; // 0 if in beam, -90 if out of beam (degrees)
 
 double ts.coll3.rotationAngle    = 180.0;
 
@@ -28,3 +28,7 @@ vector<string> bfield.innerMaps = {
   "BFieldMaps/Mau13/ProtonDumpAreaMap.header",
   "BFieldMaps/Mau13/DSExtension.header"
 };
+
+// make it thicc to study where pi+ stops happen
+vector<double> stoppingTarget.halfThicknesses  =
+    { 0.25 };
